@@ -1,6 +1,6 @@
 # Student-Led-Tutorial-6
 # Task: 16S rRNA Amplicon Sequencing Analysis
-# Date: April 3rd
+# Date: April 3rd.
 
 ## **Objective**
 Students will:
