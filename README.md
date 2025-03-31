@@ -35,19 +35,20 @@ We will use publicly available 16S rRNA sequencing data from a microbiome study.
        ```bash
        #!/bin/bash
        # Download all SRR files from PRJNA759579
-       esearch -db sra -query PRJNA759579 | efetch -format runinfo > runinfo.csv
-       cut -d ',' -f 1 runinfo.csv | grep SRR > srr_accessions.txt
+       # esearch -db sra -query PRJNA759579 | efetch -format runinfo > runinfo.csv
+       # cut -d ',' -f 1 runinfo.csv | grep SRR > srr_accessions.txt
 
        # Use prefetch to download all files
-       while read -r srr; do
-              echo "Downloading $srr..."
-              prefetch $srr
-              fasterq-dump $srr --split-files -O fastq_files/
+       module load sra-toolkit
+       while read -r SRR; do
+              echo "Downloading $SRR..."
+              prefetch $SRR
+              fastq-dump $SRR --split-files -O fastq_files/
        done < srr_accessions.txt
         ```
     -  Run the `download_sra.sh` script
         ```bash
-        bash download_sra.sh
+        bash download_sra.sh &
       -  **Output**: Paired-end FASTQ files saved in the `fastq_files`/ directory.
 ---
 ## **Step 2: Generate Metadata File**
