@@ -51,6 +51,7 @@ We will use publicly available 16S rRNA sequencing data from a microbiome study.
         bash download_sra.sh &
       -  **Output**: Paired-end FASTQ files saved in the `fastq_files`/ directory.
 ---
+
 ## **Step 2: Generate Metadata File**
 1. Metadata File Structure
 The metadata file is a tab-separated values (TSV) file with the following columns:
