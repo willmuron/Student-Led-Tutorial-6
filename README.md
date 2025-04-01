@@ -30,7 +30,12 @@ Students will:
 ### Dataset: 16S rRNA Sequencing Data
 We will use publicly available 16S rRNA sequencing data from a microbiome study.  
 - **Source**: [NCBI BioProject PRJNA759579](https://www.ebi.ac.uk/ena/browser/view/PRJEB43384](https://www.ncbi.nlm.nih.gov/sra?linkname=bioproject_sra_all&from_uid=759579)  
-1. Download FASTQ files of paired-end reads.
+1. Go to your ocean folder
+```
+myocean
+```
+2. Fork and clone the "Student-Led-Tutorial-6" repository
+3. Download FASTQ files of paired-end reads.
     -  Create a file named `download_sra.sh` with the following content:
     -  Type
 ```
