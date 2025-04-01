@@ -188,7 +188,11 @@ qiime demux summarize \
 - Add, commit and push `reads_qza/reads_trimmed_joined_filt.qzv` to Git
 - Download and open in https://view.qiime2.org/
 
-4. Run DADA2 to denoise and generate ASVs:
+4. Ask for some computer resources
+```
+salloc --mem=32G --time=2:00:00 --cpus-per-task=35 
+```
+6. Run DADA2 to denoise and generate ASVs:
 ```bash
 qiime dada2 denoise-paired \
     --i-demultiplexed-seqs reads_qza/reads.qza \
