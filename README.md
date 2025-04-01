@@ -69,6 +69,7 @@ bash download_sra.sh
 1. Run fastqc
 ```
 module load FastQC
+mkdir fastqc_raw_data_out
 fastqc -t 4 fastq_files/*.fastq.gz -o fastqc_raw_data_out
 ```
 2. Run multiqc (will not work if you activate conda environment first, in such case `conda deactivate` before running multiqc)
@@ -76,7 +77,7 @@ fastqc -t 4 fastq_files/*.fastq.gz -o fastqc_raw_data_out
 module load python/3.8.6
 multiqc --dirs fastqc_raw_data_out --filename multiqc_raw_data.html
 ```
-3. Add, commit and push file to github repository.
+3. Add, commit and push file to github repository. You can also transfer files using GLOBUS connect.
 ```
 git add "multiqc_raw_data.html"
 git commit -m "Adding multiqc results"
