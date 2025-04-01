@@ -177,7 +177,7 @@ git push origin main
 # Denoising reads
 1. Ask for some computer resources
 ```
-salloc --mem=64G --time=2:00:00 --cpus-per-task=32 
+salloc --mem=100G --time=2:00:00 --cpus-per-task=16 
 ```
 2. Run DADA2 to denoise and generate ASVs:
 ```bash
@@ -206,12 +206,8 @@ wget https://data.qiime2.org/2023.9/common/silva-138-99-nb-classifier.qza
 qiime feature-classifier classify-sklearn \
    --i-classifier silva-138-99-nb-classifier.qza \
    --i-reads rep-seqs.qza \
-   --p-n-jobs 32 \
+   --p-n-jobs 8 \
    --output-dir taxa
-```
-2. If the above takes too long, please run:
-```
-ln -s /ocean/projects/agr250001p/shared/week-7-data/taxa .
 ```
 ---
 ### Filtering resultant table
@@ -266,7 +262,7 @@ qiime feature-table summarize \
 qiime taxa barplot \
     --i-table feature-table.qza \
     --i-taxonomy taxa/classification.qza \
-    --m-sample-metadata-file metadata.tsv \
+    --m-metadata-file metadata.tsv \
     --o-visualization taxa-bar-plots.qzv
 ```
 ## **Step 6: Diversity Analysis** From 1-5 may take too long, think about producing files ahead of time.
@@ -277,21 +273,30 @@ qiime tools export \
   --output-path exported_seqs
 ```
 ```bash
-conda deactivate
+source deactivate
 conda create -n mafft-env -c bioconda mafft
 conda activate mafft-env
 ```
 ```
-mafft --thread 32 exported_seqs/dna-sequences.fasta > aligned-rep-seqs.fasta
+mafft --thread 16 exported_seqs/dna-sequences.fasta > aligned-rep-seqs.fasta
+```
+-formatting aligned fasta file
+```
+awk '/^>/ {print $0} /^[^>]/ {print toupper($0)}' aligned-rep-seqs.fasta > aligned-rep-seqs.upper.fasta
 ```
 ```
 conda deactivate
 conda activate qiime2-amplicon-2024.2
 ```
+-formatting fasta file
+```
+awk '/^>/ {print $0} /^[^>]/ {print toupper($0)}' aligned-rep-seqs.fasta > aligned-rep-seqs.upper.fasta
+```
+
 ```
 qiime tools import \
   --type 'FeatureData[AlignedSequence]' \
-  --input-path aligned_seqs.fasta \
+  --input-path aligned-rep-seqs.upper.fasta \
   --output-path aligned-rep-seqs.qza
 ```
 
@@ -320,14 +325,14 @@ qiime diversity core-metrics-phylogenetic \
     --i-phylogeny rooted-tree.qza \
     --i-table feature-table.qza \
     --p-sampling-depth 10000 \
-    --m-sample-metadata-file metadata.tsv \
+    --m-metadata-file metadata.tsv \
     --output-dir core-metrics-results
 ```
 6. Generate PCoA plots:
 ```bash
 qiime emperor plot \
     --i-pcoa core-metrics-results/unweighted_unifrac_pcoa_results.qza \
-    --m-sample-metadata-file metadata.tsv \
+    --m-metadata-file metadata.tsv \
     --o-visualization unweighted-unifrac-emperor.qzv
 ```
 ## **Step 7: Visualization and Interpretation**
