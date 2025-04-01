@@ -175,33 +175,11 @@ git push origin main
 
 ## **Step 4: Denoising with DADA2**
 # Denoising reads
-1. Join pair-end reds
-```         
-qiime vsearch merge-pairs \
-  --i-demultiplexed-seqs reads_qza/reads_trimmed.qza \
-  --output-dir reads_qza/reads_joined
-```
-2. Filter out low-quality reads
-```         
-qiime quality-filter q-score \
-  --i-demux reads_qza/reads_joined/merged_sequences.qza \
-  --o-filter-stats filt_stats.qza \
-  --o-filtered-sequences reads_qza/reads_trimmed_joined_filt.qza
-```
-3. Summarize results
-```         
-qiime demux summarize \
-  --i-data reads_qza/reads_trimmed_joined_filt.qza \
-  --o-visualization reads_qza/reads_trimmed_joined_filt_summary.qzv
-```
-- Add, commit and push `reads_qza/reads_trimmed_joined_filt.qzv` to Git
-- Download and open in https://view.qiime2.org/
-
-4. Ask for some computer resources
+1. Ask for some computer resources
 ```
 salloc --mem=32G --time=2:00:00 --cpus-per-task=35 
 ```
-6. Run DADA2 to denoise and generate ASVs:
+2. Run DADA2 to denoise and generate ASVs:
 ```bash
 qiime dada2 denoise-paired \
     --i-demultiplexed-seqs reads_qza/reads.qza \
