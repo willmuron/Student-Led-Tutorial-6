@@ -103,19 +103,22 @@ The metadata file is a tab-separated values (TSV) file with the following column
 ## **Step 3: Import Data into QIIME 2**
 ### Import the data:
 1. We need to change our raw files names so that they can be read by qiime
+  - Create directory for renamed files
+```
+mkdir -p casava_reads
+```
   - Open the vi editor
     ```
     vi rename.sh
     ```
   - Type `I` to edit and write the following:
   ```
-  mkdir -p casava_reads
-
-for file in fastq_files/*_1.fastq; do
+#!/bin/bash
+for file in fastq_files/*_1.fastq.gz; do
     base=$(basename "$file" _1.fastq.gz)
     
-    mv "${base}_1.fastq.gz" "casava_reads/${base}_L001_R1_001.fastq.gz"
-    mv "${base}_2.fastq.gz" "casava_reads/${base}_L001_R2_001.fastq.gz"
+    cp "fastq_files/${base}_1.fastq.gz" "casava_reads/${base}_S1_L001_R1_001.fastq.gz"
+    cp "fastq_files/${base}_2.fastq.gz" "casava_reads/${base}_S1_L001_R2_001.fastq.gz"
 done
 ```
 - Run rename.sh script using:
