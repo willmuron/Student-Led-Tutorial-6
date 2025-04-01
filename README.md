@@ -38,26 +38,26 @@ vi download_sra.sh
 ```
    - Type `I` and enter the following workflow:
 ```bash
-       #!/bin/bash
-       # Download all SRR files from PRJNA759579
-       # esearch -db sra -query PRJNA759579 | efetch -format runinfo > runinfo.csv
-       # cut -d ',' -f 1 runinfo.csv | grep SRR > srr_accessions.txt
+#!/bin/bash
+# Download all SRR files from PRJNA759579
+# esearch -db sra -query PRJNA759579 | efetch -format runinfo > runinfo.csv
+# cut -d ',' -f 1 runinfo.csv | grep SRR > srr_accessions.txt
 
-       # Use prefetch to download all files
-       module load sra-toolkit
-       while read -r SRR; do
-              echo "Downloading $SRR..."
-              prefetch --max-size 100G $SRR 
-              fastq-dump --gzip $SRR --split-files -O fastq_files/
-       done < srr_accessions.txt
+# Use prefetch to download all files
+module load sra-toolkit
+while read -r SRR; do
+   echo "Downloading $SRR..."
+   prefetch --max-size 100G $SRR 
+   fastq-dump --gzip $SRR --split-files -O fastq_files/
+done < srr_accessions.txt
 ```
-    - Exit the vi editor by typing `:wq`
-    - Run the `download_sra.sh` script
-    
-```bash
-        bash download_sra.sh
+- Exit the vi editor by typing `:wq`
+- Run the `download_sra.sh` script
+  
 ```
-      -  **Output**: Paired-end FASTQ files saved in the `fastq_files`/ directory.
+bash download_sra.sh
+```
+-  **Output**: Paired-end FASTQ files saved in the `fastq_files`/ directory.
 ---
 ## **Step 2: Data Quality Control**
 
@@ -96,7 +96,7 @@ The metadata file is a tab-separated values (TSV) file with the following column
 - Replace accession numbers and groups with actual information from the dataset. This file is given in the repository.
 ## **Step 3: Import Data into QIIME 2**
 ### Import the data:
-3. We need to change our raw files names so that they can be read by qiime
+1. We need to change our raw files names so that they can be read by qiime
   - Open the vi editor
     ```
     vi rename.sh
@@ -112,11 +112,15 @@ for file in fastq_files/*_1.fastq; do
     mv "${base}_2.fastq.gz" "casava_reads/${base}_L001_R2_001.fastq.gz"
 done
 ```
-1. Let's create the following directory
+- Run rename.sh script using:
+```
+bash rename.sh
+```
+2. Let's create the following directory
 ```         
 mkdir reads_qza
 ```
-2. You had installed the latest version of QIIME2, so you can either activate that environment with the command below.
+3. You had installed the latest version of QIIME2, so you can either activate that environment with the command below.
 
 ```
 module load anaconda3        
@@ -124,7 +128,7 @@ conda activate qiime2-amplicon-2024.2
 ```
 - When you are finished with this tutorial make sure you deactivate the environment using `conda deactivate`
 
-3. Feed qiime the raw reads
+4. Feed qiime the raw reads
 ```         
 qiime tools import \
   --type SampleData[PairedEndSequencesWithQuality] \
@@ -134,7 +138,7 @@ qiime tools import \
 ```
 - cassava format, files follow a pattern `SampleID_L001_R1_001.fastq.gz`
 ---
-4. remove primer sequences from reads, these are the primers used to enrich for a specific locus, e.g.:16S, COI, etc
+5. remove primer sequences from reads, these are the primers used to enrich for a specific locus, e.g.:16S, COI, etc
 ```
 qiime cutadapt trim-paired \
   --i-demultiplexed-sequences reads_qza/reads.qza \
@@ -145,7 +149,7 @@ qiime cutadapt trim-paired \
   --p-no-indels \
   --o-trimmed-sequences reads_qza/reads_trimmed.qza
 ```
-5. Visualize your data now
+6. Visualize your data now
 ```         
 qiime demux summarize \
   --i-data reads_qza/reads_trimmed.qza \
