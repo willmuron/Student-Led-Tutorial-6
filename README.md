@@ -177,7 +177,7 @@ git push origin main
 # Denoising reads
 1. Ask for some computer resources
 ```
-salloc --mem=32G --time=2:00:00 --cpus-per-task=35 
+salloc --mem=64G --time=2:00:00 --cpus-per-task=32 
 ```
 2. Run DADA2 to denoise and generate ASVs:
 ```bash
@@ -204,7 +204,7 @@ qiime feature-table summarize \
 wget https://data.qiime2.org/2023.9/common/silva-138-99-nb-classifier.qza
 
 qiime feature-classifier classify-sklearn \
-   --i-classifier silva-132-99-515-806-nb-classifier.qza \
+   --i-classifier silva-138-99-nb-classifier.qza \
    --i-reads rep-seqs.qza \
    --p-n-jobs 32 \
    --output-dir taxa
